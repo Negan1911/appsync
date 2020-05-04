@@ -1,0 +1,7 @@
+*.min.js
+packages/types/index.ts
+dist/
+node_modules/
+coverage/
+.serverless/
+.webpack/

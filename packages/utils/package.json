@@ -1,0 +1,31 @@
+{
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test",
+    "prepare": "tsdx build"
+  },
+  "peerDependencies": {},
+  "name": "utils",
+  "author": "Nahuel Veron",
+  "module": "dist/utils.esm.js",
+  "devDependencies": {
+    "tsdx": "^0.13.2",
+    "tslib": "^1.11.1",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "graphql": "^15.0.0"
+  }
+}

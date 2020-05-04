@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ExtractFromSchema Properly extract Should print a clean schema 1`] = `
+"type Author
+
+type Todo {
+  author: Author!
+}
+
+type Query {
+  GetTodo(id: String!): Todo!
+  SearchTodo(search: String!): [Todo!]
+}
+
+schema {
+  query: Query
+}
+"
+`;
