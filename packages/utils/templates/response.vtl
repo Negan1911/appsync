@@ -1,0 +1,10 @@
+#if($context.result.error)
+  $util.error(
+    $context.result.error.message,
+    $context.result.error.name,
+    {},
+    $context.result.error
+  )
+#else
+  $util.toJson($context.result.data)
+#end

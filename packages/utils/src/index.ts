@@ -20,7 +20,13 @@ export type PrimitiveValueNode =
   | BooleanValueNode
   | EnumValueNode
 
-type SchemaDefinitions = { parent: string; name: string; handler?: string }
+type SchemaDefinitions = {
+  name: string
+  field: string
+  parent: string
+  handler: string
+}
+
 interface NamableNode {
   name: NameNode
 }
@@ -113,8 +119,9 @@ export class GraphQLParser {
         enter(node, key, parent, path, ancestors) {
           const d = Utils.GetDirective(node, 'AWSLambda')
           if (d) {
+            const field = node.name.value
             const parent = (ancestors[2] as FieldDefinitionNode).name.value
-            const name = [parent, node.name.value].join('_')
+            const name = [parent, field].join('_')
             const handler = Utils.GetArgument<StringValueNode>(
               d,
               node,
@@ -123,7 +130,7 @@ export class GraphQLParser {
               true
             )
 
-            definitions.push({ parent, name, handler: handler as string })
+            handler && definitions.push({ parent, name, handler, field })
 
             return {
               ...node,
