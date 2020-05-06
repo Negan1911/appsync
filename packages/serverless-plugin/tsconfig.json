@@ -1,12 +1,13 @@
 {
   "include": ["src", "types"],
   "compilerOptions": {
-    "module": "esnext",
-    "lib": ["dom", "esnext"],
+    "module": "CommonJS",
+    "lib": ["esnext"],
     "importHelpers": true,
     "declaration": true,
     "sourceMap": true,
     "rootDir": "./src",
+    "outDir": "./dist",
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -16,7 +17,6 @@
     "paths": {
       "*": ["src/*", "node_modules/*"]
     },
-    "jsx": "react",
     "esModuleInterop": true
   }
 }

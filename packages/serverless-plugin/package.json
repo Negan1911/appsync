@@ -1,5 +1,5 @@
 {
-  "version": "0.2.1",
+  "version": "0.2.4",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -11,8 +11,8 @@
     "node": ">=10"
   },
   "scripts": {
-    "build": "tsdx build",
-    "prepare": "tsdx build"
+    "build": "tsc",
+    "prepare": "tsc"
   },
   "name": "@appsync/serverless-plugin",
   "author": "Nahuel Veron",

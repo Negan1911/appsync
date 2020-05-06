@@ -3,8 +3,8 @@ import path from 'path'
 import glue from 'schemaglue'
 import Serverless from 'serverless'
 import { GraphQLParser } from '@appsync/utils'
-import AppSync from 'serverless-appsync-plugin'
 import Service from 'serverless/classes/Service'
+import AppSync = require('serverless-appsync-plugin')
 const templates = path.join(require.resolve('@appsync/utils'), '..', '..')
 
 type AppsyncConfig = { schemaDir?: string; schema?: string }
@@ -39,7 +39,7 @@ function ProcessSchema(servicePath: string, appsync: AppsyncConfig) {
 type AppSyncOptions = Serverless.Options & { serviceRole?: string }
 type ServerlessInit = Serverless & { service: Service & { functions: object } }
 
-export default class LambdaGraphQLPlugin extends AppSync {
+export = class LambdaGraphQLPlugin extends AppSync {
   constructor(serverless: ServerlessInit, options: AppSyncOptions) {
     const serviceRole = options.serviceRole || 'AppSyncServiceRole'
     const functions = serverless.service.functions
