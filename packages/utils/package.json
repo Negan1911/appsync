@@ -1,5 +1,5 @@
 {
-  "version": "0.1.1",
+  "version": "0.0.0",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -15,6 +15,9 @@
     "build": "tsdx build",
     "test": "tsdx test",
     "prepare": "tsdx build"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "name": "@appsync/utils",
   "author": "Nahuel Veron",
