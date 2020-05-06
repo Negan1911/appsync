@@ -1,9 +1,9 @@
 import fs from 'fs'
 import path from 'path'
 import glue from 'schemaglue'
+import Serverless from 'serverless'
 import { GraphQLParser } from '@appsync/utils'
 import AppSync from 'serverless-appsync-plugin'
-import Serverless from 'serverless'
 import Service from 'serverless/classes/Service'
 const templates = path.join(require.resolve('@appsync/utils'), '..', '..')
 
