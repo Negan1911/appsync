@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -14,8 +14,7 @@
     "build": "tsdx build",
     "prepare": "tsdx build"
   },
-  "peerDependencies": {},
-  "name": "serverless-plugin",
+  "name": "@appsync/serverless-plugin",
   "author": "Nahuel Veron",
   "module": "dist/serverless-plugin.esm.js",
   "devDependencies": {
