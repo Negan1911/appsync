@@ -48,6 +48,7 @@ export = class LambdaGraphQLPlugin extends AppSync {
   constructor(serverless: ServerlessInit, options: AppSyncOptions) {
     const serviceRole = options.serviceRole || 'AppSyncServiceRole'
     const functions = serverless.service.functions
+    const prefix = serverless?.service?.custom?.appSync?.prefix ?? ''
     const entries = ProcessSchema(
       serverless.config.servicePath,
       serverless.service.custom.appSync
@@ -56,7 +57,8 @@ export = class LambdaGraphQLPlugin extends AppSync {
     serverless.service.functions = {
       ...functions,
       ...entries.reduce((all, _) => {
-        return { ...all, [_.name]: { name: _.name, handler: _.handler } }
+        const name = [prefix, _.name].join('-')
+        return { ...all, [name]: { name, handler: _.handler } }
       }, {}),
     }
 

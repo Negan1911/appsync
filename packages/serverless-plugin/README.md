@@ -30,6 +30,7 @@ _Note, if you were using `serverless-appsync-plugin`, remove it, since this plug
   custom:
     appSync:
       schema: schema.graphql # If you're not using Schema stitching, you can specify a single graphql file here.
+      prefix: 'some_prefix' # If you want to prefix aws lambda names, here you can add a prefix.
       schemaDir: Controllers/ # Directory to find out the .graphql schemas (Schema stitching), this overrides "schema" field.
       authenticationType: API_KEY #See serverless-appsync-plugin documentation.
       name: ${self:service.name}_${self:provider.stage} #See serverless-appsync-plugin documentation.
