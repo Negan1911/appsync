@@ -33,8 +33,6 @@ _Note, if you were using `serverless-appsync-plugin`, remove it, since this plug
       schemaDir: Controllers/ # Directory to find out the .graphql schemas (Schema stitching), this overrides "schema" field.
       authenticationType: API_KEY #See serverless-appsync-plugin documentation.
       name: ${self:service.name}_${self:provider.stage} #See serverless-appsync-plugin documentation.
-      request: 'request.vtl' #See 'mappingTemplates.request' serverless-appsync-plugin documentation.
-      response: 'response.vtl' #See 'mappingTemplates.response' serverless-appsync-plugin documentation.
       serviceRole: 'AppSyncServiceRole' #See 'dataSources.config.serviceRoleArn' serverless-appsync-plugin documentation.
 ```
 
@@ -42,9 +40,23 @@ _Note, if you were using `serverless-appsync-plugin`, remove it, since this plug
 Create any `.graphql` file under `schemaDir` directory like this:
 
 ```graphql
+  type Author {
+    name: String
+  }
+
+  type Todo {
+    id: String!
+    text: String!
+    title: String!
+    author: Author!
+    @AWSLambda(handler: "Controllers/Todo/Author/index.default")
+  }
+
   type Query {
-    GetPost(id: ID): Post
-    @AWSLambda(handler: "Controllers/Post/GetPost")
+    GetTodo(id: String!): Todo!
+    @AWSLambda(handler: "Controllers/Todo/GetTodo.default")
+    SearchTodo(search: String!): [Todo!]
+    @AWSLambda(handler: "Controllers/Todo/SearchTodo.default")
   }
 
   schema {
@@ -55,6 +67,55 @@ Create any `.graphql` file under `schemaDir` directory like this:
 Replace schema and types accordingly, "handler" should point to the function you want to bind
 to this lambda.
 
+**Event Shape**:
+##### Request Event:
+When your lambdas are called, the following request is sent on the lambda's first parameter:
+```json
+{
+    // Arguments Received from the call (see `GetTodo` as example).
+    "args": {
+      "id": "6w4d3xpnevfrdemm7qmpo375fq"        
+    },
+    // If this is a query as was within a field, you'll receive his parent value here.
+    // (see `author` field as example, on `parent` you'll receive the `Todo`)
+    "parent": null,
+    // Headers from the request, in a key-value object.
+    "headers": {
+        "authorization": "Bearer eyJh.......90",
+        "sec-fetch-dest": "empty",
+        "cloudfront-is-desktop-viewer": "true",
+        "sec-fetch-site": "same-origin",
+        "x-forwarded-port": "443"
+    }
+}
+```
+
+##### Successful Response:
+If everything worked well, you can return data to the client by returning:
+```json
+{
+  // Remember, `data` should match the response type of your graphql field, this
+  // is the example of `GetTodo`
+  "data": {
+    "id": "6w4d3xpnevfrdemm7qmpo375fq",
+    "text": "This is your note body, you can put things here",
+    "title": "An ordinary note"
+  }
+}
+```
+
+##### Failed Response:
+If an error ocurred, we'll format it accordingly if `error` property is returned:
+```json
+{
+  "error": {
+    "name": "NotFound",
+    "message": "Todo not found",
+    "other_field": "any other field that you like to return to the client"
+  }
+}
+```
+For proper formatting, please return `name` and `message` on those errors.
 
 ## API:
 
@@ -117,22 +178,22 @@ resources:
 ### Usage
 `@AWSLambda` flags the following field to be resolved with a function:
 ```gql
-# It can be used on a root field: 
+# It can be used on a root type: 
 type Query {
-  GetPost(id: ID!): Post
-  @AWSLambda(handler: "Controllers/Posts/GetPost.default")
+  GetTodo(id: String!): Todo!
+  @AWSLambda(handler: "Controllers/Todo/GetTodo.default")
 }
 
 # Or within another type:
-type Post {
-  name: String
-  text: String
-  CreatedBy: User
-  @AWSLambda(handler: "Helpers/CreatedBy.default")
+type Todo {
+  id: String!
+  text: String!
+  title: String!
+  author: Author!
+  @AWSLambda(handler: "Controllers/Todo/Author/index.default")
 }
 ```
 
 ## Parameters:
  - `handler`: Handler receives a string with the path of where the function is
-    located, if is part of several exports, use dot notitation to define which
-    exported method should be called.
+    located, use dot notation to define which exported method should be called.
