@@ -179,7 +179,7 @@ export class GraphQLParser {
             }
           }
 
-          return null
+          return node
         },
       },
     })
