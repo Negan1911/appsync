@@ -1,6 +1,7 @@
 {
   "include": ["src", "types"],
   "compilerOptions": {
+    "target": "es6",
     "module": "CommonJS",
     "lib": ["esnext"],
     "importHelpers": true,
