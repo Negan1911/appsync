@@ -5,7 +5,12 @@ import Serverless from 'serverless'
 import { GraphQLParser } from '@appsync/utils'
 import Service from 'serverless/classes/Service'
 import AppSync = require('serverless-appsync-plugin')
-const templates = path.join(require.resolve('@appsync/utils'), '..', '..')
+const templates = path.join(
+  require.resolve('@appsync/utils'),
+  '..',
+  '..',
+  'templates'
+)
 
 type AppsyncConfig = { schemaDir?: string; schema?: string }
 
