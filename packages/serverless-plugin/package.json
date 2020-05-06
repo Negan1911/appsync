@@ -1,11 +1,11 @@
 {
   "name": "@appsync/serverless-plugin",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "index.js",
   "author": "Nahuel Veron",
   "license": "MIT",
   "dependencies": {
-    "@appsync/utils": "^0.1.0",
+    "@appsync/utils": "^0.1.1",
     "schemaglue": "^4.0.4",
     "serverless-appsync-plugin": "^1.3.0"
   }
