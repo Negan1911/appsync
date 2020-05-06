@@ -32,10 +32,17 @@ interface NamableNode {
 }
 
 class Utils {
+  /**
+   * Returns an understandable error and a way to found on which node happened.
+   * @internal
+   * @param node Node where the error happened, will be formatted on the error.
+   * @param message Description of the error.
+   * @returns Formatted error.
+   */
   static LocalizedError<Node extends NamableNode>(
     node: Node | Array<Node>,
     message: string
-  ) {
+  ): Error {
     if (Array.isArray(node)) {
       const name = node.reduce((msg, _) => {
         if (!_?.name?.value) return msg
@@ -49,6 +56,14 @@ class Utils {
     return new Error(name ? `[${name}]: ${message}` : message)
   }
 
+  /**
+   * Returns an understandable error and a way to found on which node happened.
+   * @internal
+   * @param directive Directive node where the error happened.
+   * @param field Field node where the error happened.
+   * @param message description of the error.
+   * @returns Formatted error.
+   */
   static LocalizedFieldError(
     directive: DirectiveNode,
     field: FieldDefinitionNode,
@@ -57,6 +72,17 @@ class Utils {
     return Utils.LocalizedError([field, directive], message)
   }
 
+  /**
+   * Returns a directive argument value.
+   * @internal
+   * @template Type Type of the argument value.
+   * @param directive Directive where the value belongs.
+   * @param field Field where the directive belongs.
+   * @param name Name of the argument to look for.
+   * @param type Type of the argument value, validates against `Type`.
+   * @param required If required, fails if not found.
+   * @returns Argument type or null if not found (and not required).
+   */
   static GetArgument<Type extends PrimitiveValueNode>(
     directive: DirectiveNode,
     field: FieldDefinitionNode,
@@ -99,9 +125,16 @@ class Utils {
     throw Utils.LocalizedFieldError(directive, field, 'Has no arguments.')
   }
 
-  static GetDirective(node: FieldDefinitionNode, name: string) {
-    if (node && node.directives) {
-      return node.directives.find((d) => d.name.value === name)
+  /**
+   * Returns a specific directive from a field.
+   * @internal
+   * @param field Field where the directive belongs.
+   * @param name Name of the directive to look for.
+   * @returns Directive Node or undefined if not found
+   */
+  static GetDirective(field: FieldDefinitionNode, name: string) {
+    if (field && field.directives) {
+      return field.directives.find((d) => d.name.value === name)
     }
 
     return undefined
@@ -109,6 +142,11 @@ class Utils {
 }
 
 export class GraphQLParser {
+  /**
+   * Extract definitions from a schema, and returns a useable schema.
+   * @param schema Schema as string
+   * @returns Tuple, first parameter a list of definitions taken from `@AWSLambda` directives, 2nd parameter is a clean schema
+   */
   static ExtractFromSchema(
     schema: string | Source
   ): [Array<SchemaDefinitions>, string] {

@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "tsdx watch",
-    "build": "tsdx build",
+    "build": "tsdx build && typedoc",
     "test": "tsdx test",
     "prepare": "tsdx build"
   },
@@ -25,6 +25,7 @@
   "devDependencies": {
     "tsdx": "^0.13.2",
     "tslib": "^1.11.1",
+    "typedoc": "^0.17.6",
     "typescript": "^3.8.3"
   },
   "dependencies": {

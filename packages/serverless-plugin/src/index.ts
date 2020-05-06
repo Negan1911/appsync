@@ -1,12 +1,15 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const fs = require('fs')
-const path = require('path')
-const glue = require('schemaglue')
-const { GraphQLParser } = require('@appsync/utils')
-const AppSync = require('serverless-appsync-plugin')
+import fs from 'fs'
+import path from 'path'
+import glue from 'schemaglue'
+import { GraphQLParser } from '@appsync/utils'
+import AppSync from 'serverless-appsync-plugin'
+import Serverless from 'serverless'
+import Service from 'serverless/classes/Service'
 const templates = path.join(require.resolve('@appsync/utils'), '..', '..')
 
-function ProcessSchema(servicePath, appsync) {
+type AppsyncConfig = { schemaDir?: string; schema?: string }
+
+function ProcessSchema(servicePath: string, appsync: AppsyncConfig) {
   // Target of where the final schema (without special directive) will be.
   const schemapath = path.join(servicePath, '.serverless_schema.graphql')
   let raw_schema = null
@@ -18,7 +21,7 @@ function ProcessSchema(servicePath, appsync) {
   } else if (appsync.schema) {
     // Base from where get the .graphql files.
     raw_schema = fs.readFileSync(
-      path.join(servicePath, appsync.schemaDir),
+      path.join(servicePath, appsync.schemaDir as string),
       'utf8'
     )
   } else
@@ -33,8 +36,11 @@ function ProcessSchema(servicePath, appsync) {
   return values
 }
 
-module.exports = class LambdaGraphQLPlugin extends AppSync {
-  constructor(serverless, options) {
+type AppSyncOptions = Serverless.Options & { serviceRole?: string }
+type ServerlessInit = Serverless & { service: Service & { functions: object } }
+
+export default class LambdaGraphQLPlugin extends AppSync {
+  constructor(serverless: ServerlessInit, options: AppSyncOptions) {
     const serviceRole = options.serviceRole || 'AppSyncServiceRole'
     const functions = serverless.service.functions
     const entries = ProcessSchema(
@@ -69,8 +75,8 @@ module.exports = class LambdaGraphQLPlugin extends AppSync {
           dataSource: _.name,
           type: _.parent,
           field: _.field,
-          request: path.join(templates, 'request.vtl')
-          response: path.join(templates, 'response.vtl')
+          request: path.join(templates, 'request.vtl'),
+          response: path.join(templates, 'response.vtl'),
         })),
       ],
     }
