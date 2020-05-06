@@ -1,6 +1,6 @@
 {
   "name": "@appsync/serverless-plugin",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "main": "index.js",
   "author": "Nahuel Veron",
   "license": "MIT",
