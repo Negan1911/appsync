@@ -53,7 +53,7 @@ export = class LambdaGraphQLPlugin extends AppSync {
       ...functions,
       ...entries.reduce((all, _) => {
         const name = [prefix, _.name].join('-')
-        return { ...all, [name]: { name, handler: _.handler } }
+        return { ...all, [_.name]: { name, handler: _.handler } }
       }, {}),
     }
 
