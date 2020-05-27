@@ -52,7 +52,7 @@ export = class LambdaGraphQLPlugin extends AppSync {
     serverless.service.functions = {
       ...functions,
       ...entries.reduce((all, _) => {
-        const name = [prefix, _.name].join('-')
+        const name = [prefix, _.name].filter((_) => !!_).join('-')
         return { ...all, [_.name]: { name, handler: _.handler } }
       }, {}),
     }
