@@ -5,15 +5,10 @@ import Serverless from 'serverless'
 import { GraphQLParser } from '@appsync/utils'
 import Service from 'serverless/classes/Service'
 import AppSync = require('serverless-appsync-plugin')
-const templates = path.join(
-  require.resolve('@appsync/utils'),
-  '..',
-  '..',
-  'templates'
-)
 
 type AppsyncConfig = { schemaDir?: string; schema?: string }
 
+const utils_path = require.resolve('@appsync/utils')
 function ProcessSchema(servicePath: string, appsync: AppsyncConfig) {
   // Target of where the final schema (without special directive) will be.
   const schemapath = path.join(servicePath, '.serverless_schema.graphql')
@@ -65,6 +60,7 @@ export = class LambdaGraphQLPlugin extends AppSync {
     serverless.service.custom.appSync = {
       ...serverless.service.custom.appSync,
       schema: '.serverless_schema.graphql',
+      mappingTemplatesLocation: path.join(utils_path, '..', '..', 'templates'),
       dataSources: [
         ...(serverless.service.custom.appSync.dataSources || []),
         ...entries.map((_) => ({
@@ -82,8 +78,8 @@ export = class LambdaGraphQLPlugin extends AppSync {
           dataSource: _.name,
           type: _.parent,
           field: _.field,
-          request: path.join(templates, 'request.vtl'),
-          response: path.join(templates, 'response.vtl'),
+          request: 'request.vtl',
+          response: 'response.vtl',
         })),
       ],
     }
